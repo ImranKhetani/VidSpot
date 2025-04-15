@@ -1,0 +1,14 @@
+﻿@page
+@model MyWebApp.Pages.VideosModel
+<div class="text-center mt-4">
+    <h1 class="display-5">Video List</h1>
+    <p class="text-muted">Select a video below to start streaming:</p>
+</div>
+<div class="list-group">
+    <a href="/Videos/VideoPlayer?name=sample1.mp4" class="list-group-item list-group-item-action">
+        Sample Video 1
+    </a>
+    <a href="/Videos/VideoPlayer?name=sample2.mp4" class="list-group-item list-group-item-action">
+        Sample Video 2
+    </a>
+</div>
