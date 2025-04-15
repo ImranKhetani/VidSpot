@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: #enable manual triggere
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -29,17 +29,21 @@ jobs:
           inlineScript: |
             az deployment group create \
               --resource-group TechSolutionsRG \
+              --name deployVidSpot \
               --template-file ./bicep/main.bicep \
               --parameters randomSeed=${{ github.run_id }}
-            # Capture output
-            az deployment group show --resource-group TechSolutionsRG --name <deployment-name> \
+            az deployment group show \
+              --resource-group TechSolutionsRG \
+              --name deployVidSpot \
               --query "properties.outputs" > outputs.json
 
       # Step 4: Extract Web App Names
       - name: Parse Output Variables
         run: |
-          export WEBAPP_CI=$(jq -r '.webAppNameCentralIndia' outputs.json)
-          export WEBAPP_SEA=$(jq -r '.webAppNameSoutheastAsia')
+          WEBAPP_CI=$(jq -r '.webAppNameCentralIndia.value' outputs.json)
+          WEBAPP_SEA=$(jq -r '.webAppNameSoutheastAsia.value')
+          echo "WEBAPP_CI=$WEBAPP_CI" >> $GITHUB_ENV
+          echo "WEBAPP_SEA=$WEBAPP_SEA" >> $GITHUB_ENV
 
       # Step 5: Deploy Application Code to Central India Web App
       - name: Deploy Application Code to Web App (Central India)
