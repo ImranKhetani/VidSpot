@@ -1,7 +1,18 @@
+@secure()
+param randomSeed string  // Input seed to ensure uniqueness for randomness
+
+// Generate Random Suffix
+var randomStringCentralIndia = uniqueString(format('{0}-CI', randomSeed))
+var randomStringSoutheastAsia = uniqueString(format('{0}-SEA', randomSeed))
+
+// Web App Names
+var webAppNameCentralIndia = format('VidSpot_CI_{0}', randomStringCentralIndia)
+var webAppNameSoutheastAsia = format('VidSpot_SEA_{0}', randomStringSoutheastAsia)
+
 // Define App Service Plan for Central India (Free Tier)
 resource appServicePlanCentralIndia 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: 'TechSolutionsPlanCentralIndia'
-  location: 'centralindia' // Explicit location
+  location: 'centralindia'
   sku: {
     name: 'F1'
     tier: 'Free'
@@ -12,7 +23,7 @@ resource appServicePlanCentralIndia 'Microsoft.Web/serverfarms@2022-03-01' = {
 // Define App Service Plan for Southeast Asia (Free Tier)
 resource appServicePlanSoutheastAsia 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: 'TechSolutionsPlanSoutheastAsia'
-  location: 'southeastasia' // Explicit location
+  location: 'southeastasia'
   sku: {
     name: 'F1'
     tier: 'Free'
@@ -22,8 +33,8 @@ resource appServicePlanSoutheastAsia 'Microsoft.Web/serverfarms@2022-03-01' = {
 
 // Define Web App for Central India
 resource webAppCentralIndia 'Microsoft.Web/sites@2022-03-01' = {
-  name: 'TechSolutionsWebAppCentralIndia'
-  location: 'centralindia' // Explicit location
+  name: webAppNameCentralIndia
+  location: 'centralindia'
   properties: {
     serverFarmId: appServicePlanCentralIndia.id
   }
@@ -31,8 +42,8 @@ resource webAppCentralIndia 'Microsoft.Web/sites@2022-03-01' = {
 
 // Define Web App for Southeast Asia
 resource webAppSoutheastAsia 'Microsoft.Web/sites@2022-03-01' = {
-  name: 'TechSolutionsWebAppSoutheastAsia'
-  location: 'southeastasia' // Explicit location
+  name: webAppNameSoutheastAsia
+  location: 'southeastasia'
   properties: {
     serverFarmId: appServicePlanSoutheastAsia.id
   }
