@@ -3,7 +3,6 @@
 VidSpot is a lightweight and intuitive video streaming application designed for demonstration purposes and free use. Built using modern web technologies, VidSpot allows users to stream videos effortlessly, showcasing the simplicity and functionality of a web-based video platform.
 
 ## Features
-- **Responsive Design**: Accessible across various devices.
 - **Stream Videos Seamlessly**: Designed for easy playback and user experience.
 - **Lightweight Architecture**: Perfect for demo and educational use.
 
