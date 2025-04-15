@@ -85,10 +85,12 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
+            echo "Current Directory: $(pwd)"
+            echo "Deploying from path: $(pwd)/src/publish"
             echo "Deploying to Web App (Central India): $WEBAPP_CI"
             az webapp deploy --name $WEBAPP_CI \
               --resource-group TechSolutionsRG \
-              --src-path ./src/publish \
+              --src-path $(pwd)/src/publish \
               --type zip
 
       # Step 8: Deploy Application Code to Southeast Asia Web App
@@ -96,8 +98,10 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
+            echo "Current Directory: $(pwd)"
+            echo "Deploying from path: $(pwd)/src/publish"
             echo "Deploying to Web App (Southeast Asia): $WEBAPP_SEA"
             az webapp deploy --name $WEBAPP_SEA \
               --resource-group TechSolutionsRG \
-              --src-path ./src/publish \
+              --src-path $(pwd)/src/publish \
               --type zip
