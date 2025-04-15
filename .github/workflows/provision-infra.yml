@@ -42,7 +42,18 @@ jobs:
           fi
           echo "Validation passed. Publish directory exists."
 
-      # Step 5: Deploy Infrastructure using Bicep template
+      # Step 5: Set Directory Permissions
+      - name: Set Directory Permissions
+        run: chmod -R 755 ./src/publish
+
+      # Step 6: Zip Published Files
+      - name: Zip Published Files
+        run: |
+          echo "Zipping published files..."
+          cd ./src/publish
+          zip -r ../app.zip .
+
+      # Step 7: Deploy Infrastructure using Bicep template
       - name: Deploy Bicep template
         uses: azure/CLI@v1
         id: deploy-infra
@@ -64,13 +75,13 @@ jobs:
               --name deployVidSpot \
               --query "properties.outputs" > outputs.json
 
-      # Step 6: Debug outputs.json content
+      # Step 8: Debug outputs.json content
       - name: Debug outputs.json content
         run: |
           echo "Contents of outputs.json:"
           cat outputs.json
 
-      # Step 7: Parse Web App Names
+      # Step 9: Parse Web App Names
       - name: Parse Output Variables
         run: |
           echo "Parsing web app names from outputs.json..."
@@ -91,7 +102,7 @@ jobs:
           echo "WEBAPP_CI=$WEBAPP_CI" >> $GITHUB_ENV
           echo "WEBAPP_SEA=$WEBAPP_SEA" >> $GITHUB_ENV
 
-      # Step 8: Validate Web App Names
+      # Step 10: Validate Web App Names
       - name: Validate Web App Names
         run: |
           echo "Validating web app names..."
@@ -101,32 +112,32 @@ jobs:
           fi
           echo "Validation passed. WEBAPP_CI and WEBAPP_SEA are set."
 
-      # Step 9: Deploy Application Code to Central India Web App
+      # Step 11: Deploy Application Code to Central India Web App
       - name: Deploy Application Code to Web App (Central India)
         uses: azure/cli@v2
         with:
           inlineScript: |
             echo "Current Directory: $(pwd)"
-            echo "Deploying from path: $(pwd)/src/publish"
+            echo "Deploying from path: $(pwd)/src/app.zip"
             echo "Deploying to Web App (Central India): $WEBAPP_CI"
             
             # Deploy application
             az webapp deploy --name $WEBAPP_CI \
               --resource-group TechSolutionsRG \
-              --src-path $(pwd)/src/publish \
+              --src-path /home/runner/work/VidSpot/VidSpot/src/app.zip \
               --type zip
 
-      # Step 10: Deploy Application Code to Southeast Asia Web App
+      # Step 12: Deploy Application Code to Southeast Asia Web App
       - name: Deploy Application Code to Web App (Southeast Asia)
         uses: azure/cli@v2
         with:
           inlineScript: |
             echo "Current Directory: $(pwd)"
-            echo "Deploying from path: $(pwd)/src/publish"
+            echo "Deploying from path: $(pwd)/src/app.zip"
             echo "Deploying to Web App (Southeast Asia): $WEBAPP_SEA"
             
             # Deploy application
             az webapp deploy --name $WEBAPP_SEA \
               --resource-group TechSolutionsRG \
-              --src-path $(pwd)/src/publish \
+              --src-path /home/runner/work/VidSpot/VidSpot/src/app.zip \
               --type zip
