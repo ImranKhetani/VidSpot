@@ -64,3 +64,4 @@ jobs:
               --resource-group TechSolutionsRG \
               --src-path ./src/publish \
               --type zip
+
