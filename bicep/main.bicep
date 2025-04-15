@@ -1,13 +1,7 @@
-// Define resource group
-resource rg 'Microsoft.Resources/resourceGroups@2023-01-01' = {
-  name: 'TechSolutionsRG'
-  location: 'centralindia'
-}
-
 // Define App Service Plan for Central India (Free Tier)
 resource appServicePlanCentralIndia 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: 'TechSolutionsPlanCentralIndia'
-  location: rg.location
+  location: 'centralindia' // Explicit location
   sku: {
     name: 'F1'
     tier: 'Free'
@@ -18,7 +12,7 @@ resource appServicePlanCentralIndia 'Microsoft.Web/serverfarms@2022-03-01' = {
 // Define App Service Plan for Southeast Asia (Free Tier)
 resource appServicePlanSoutheastAsia 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: 'TechSolutionsPlanSoutheastAsia'
-  location: 'southeastasia'
+  location: 'southeastasia' // Explicit location
   sku: {
     name: 'F1'
     tier: 'Free'
@@ -29,7 +23,7 @@ resource appServicePlanSoutheastAsia 'Microsoft.Web/serverfarms@2022-03-01' = {
 // Define Web App for Central India
 resource webAppCentralIndia 'Microsoft.Web/sites@2022-03-01' = {
   name: 'TechSolutionsWebAppCentralIndia'
-  location: rg.location
+  location: 'centralindia' // Explicit location
   properties: {
     serverFarmId: appServicePlanCentralIndia.id
   }
@@ -38,7 +32,7 @@ resource webAppCentralIndia 'Microsoft.Web/sites@2022-03-01' = {
 // Define Web App for Southeast Asia
 resource webAppSoutheastAsia 'Microsoft.Web/sites@2022-03-01' = {
   name: 'TechSolutionsWebAppSoutheastAsia'
-  location: 'southeastasia'
+  location: 'southeastasia' // Explicit location
   properties: {
     serverFarmId: appServicePlanSoutheastAsia.id
   }

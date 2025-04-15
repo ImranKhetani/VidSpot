@@ -24,4 +24,4 @@ jobs:
           inlineScript: |
             az deployment group create \
               --resource-group TechSolutionsRG \
-              --template-file main.bicep
+              --template-file ./bicep/main.bicep
