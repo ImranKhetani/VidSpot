@@ -23,26 +23,39 @@ jobs:
       # Step 3: Deploy Infrastructure using Bicep template
       - name: Deploy Bicep template
         uses: azure/CLI@v1
+        id: deploy-infra  # Add an ID for capturing output
         with:
           inlineScript: |
             az deployment group create \
               --resource-group TechSolutionsRG \
-              --template-file ./bicep/main.bicep
+              --template-file ./bicep/main.bicep \
+              --parameters randomSeed=${{ github.run_id }}
+            # Capture output
+            az deployment group show --resource-group TechSolutionsRG --name <deployment-name> \
+              --query "properties.outputs" > outputs.json
 
-      # Step 4: Deploy Application Code to Central India Web App
+      # Step 4: Extract Web App Names
+      - name: Parse Output Variables
+        run: |
+          export WEBAPP_CI=$(jq -r '.webAppNameCentralIndia' outputs.json)
+          export WEBAPP_SEA=$(jq -r '.webAppNameSoutheastAsia')
+
+      # Step 5: Deploy Application Code to Central India Web App
       - name: Deploy Application Code to Web App (Central India)
-        uses: azure/webapps-deploy@v2
+        uses: azure/cli@v2
         with:
-          app-name: TechSolutionsWebAppCentralIndia
-          slot-name: production
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_CENTRAL_INDIA }}
-          package: ./src/publish
+          inlineScript: |
+            az webapp deploy --name $WEBAPP_CI \
+              --resource-group TechSolutionsRG \
+              --src-path ./src/publish \
+              --type zip
 
-      # Step 5: Deploy Application Code to Southeast Asia Web App
+      # Step 6: Deploy Application Code to Southeast Asia Web App
       - name: Deploy Application Code to Web App (Southeast Asia)
-        uses: azure/webapps-deploy@v2
+        uses: azure/cli@v2
         with:
-          app-name: TechSolutionsWebAppSoutheastAsia
-          slot-name: production
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_SOUTHEAST_ASIA }}
-          package: ./src/publish
+          inlineScript: |
+            az webapp deploy --name $WEBAPP_SEA \
+              --resource-group TechSolutionsRG \
+              --src-path ./src/publish \
+              --type zip
