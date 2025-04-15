@@ -1,4 +1,4 @@
-name: Provision and Deploy Application
+name: Provision, Build, and Deploy Application
 
 on:
   push:
@@ -21,7 +21,15 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Step 3: Deploy Infrastructure using Bicep template
+      # Step 3: Build and Publish Project
+      - name: Build and Publish Project
+        run: |
+          echo "Building and publishing the project..."
+          dotnet publish ./src/VidSpot.csproj -c Release -o ./src/publish
+          echo "Build and publish completed. Files in ./src/publish:"
+          ls -R ./src/publish
+
+      # Step 4: Deploy Infrastructure using Bicep template
       - name: Deploy Bicep template
         uses: azure/CLI@v1
         id: deploy-infra
@@ -43,13 +51,13 @@ jobs:
               --name deployVidSpot \
               --query "properties.outputs" > outputs.json
 
-      # Step 4: Debug outputs.json content
+      # Step 5: Debug outputs.json content
       - name: Debug outputs.json content
         run: |
           echo "Contents of outputs.json:"
           cat outputs.json
 
-      # Step 5: Parse Web App Names
+      # Step 6: Parse Web App Names
       - name: Parse Output Variables
         run: |
           echo "Parsing web app names from outputs.json..."
@@ -70,7 +78,7 @@ jobs:
           echo "WEBAPP_CI=$WEBAPP_CI" >> $GITHUB_ENV
           echo "WEBAPP_SEA=$WEBAPP_SEA" >> $GITHUB_ENV
 
-      # Step 6: Validate Web App Names
+      # Step 7: Validate Web App Names
       - name: Validate Web App Names
         run: |
           echo "Validating web app names..."
@@ -80,7 +88,7 @@ jobs:
           fi
           echo "Validation passed. WEBAPP_CI and WEBAPP_SEA are set."
 
-      # Step 7: Deploy Application Code to Central India Web App
+      # Step 8: Deploy Application Code to Central India Web App
       - name: Deploy Application Code to Web App (Central India)
         uses: azure/cli@v2
         with:
@@ -93,7 +101,7 @@ jobs:
               --src-path $(pwd)/src/publish \
               --type zip
 
-      # Step 8: Deploy Application Code to Southeast Asia Web App
+      # Step 9: Deploy Application Code to Southeast Asia Web App
       - name: Deploy Application Code to Web App (Southeast Asia)
         uses: azure/cli@v2
         with:
