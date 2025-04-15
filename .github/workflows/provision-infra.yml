@@ -53,12 +53,20 @@ jobs:
       - name: Parse Output Variables
         run: |
           echo "Parsing web app names from outputs.json..."
+
+          # Debugging specific outputs
+          echo "webAppNameCentralIndia: $(jq '.webAppNameCentralIndia' outputs.json)"
+          echo "webAppNameSoutheastAsia: $(jq '.webAppNameSoutheastAsia' outputs.json)"
+
+          # Parse values
           WEBAPP_CI=$(jq -r '.webAppNameCentralIndia.value' outputs.json)
-          WEBAPP_SEA=$(jq -r '.webAppNameSoutheastAsia.value')
+          WEBAPP_SEA=$(jq -r '.webAppNameSoutheastAsia.value' outputs.json)
+
+          # Debug parsed values
           echo "WEBAPP_CI: $WEBAPP_CI"
           echo "WEBAPP_SEA: $WEBAPP_SEA"
 
-          # Export environment variables for subsequent steps
+          # Export environment variables
           echo "WEBAPP_CI=$WEBAPP_CI" >> $GITHUB_ENV
           echo "WEBAPP_SEA=$WEBAPP_SEA" >> $GITHUB_ENV
 
