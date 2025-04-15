@@ -5,11 +5,11 @@ param randomSeed string  // Input seed to ensure uniqueness for randomness
 var randomStringCentralIndia = uniqueString(format('{0}-CI', randomSeed))
 var randomStringSoutheastAsia = uniqueString(format('{0}-SEA', randomSeed))
 
-// Web App Names
-var webAppNameCentralIndia = format('VidSpot_CI_{0}', randomStringCentralIndia)
-var webAppNameSoutheastAsia = format('VidSpot_SEA_{0}', randomStringSoutheastAsia)
+// Replace underscores with hyphens in generated names
+var webAppNameCentralIndia = format('VidSpot-CI-{0}', randomStringCentralIndia)
+var webAppNameSoutheastAsia = format('VidSpot-SEA-{0}', randomStringSoutheastAsia)
 
-// Define App Service Plan for Central India (Free Tier)
+// Define App Service Plan for Central India
 resource appServicePlanCentralIndia 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: 'TechSolutionsPlanCentralIndia'
   location: 'centralindia'
@@ -20,7 +20,7 @@ resource appServicePlanCentralIndia 'Microsoft.Web/serverfarms@2022-03-01' = {
   }
 }
 
-// Define App Service Plan for Southeast Asia (Free Tier)
+// Define App Service Plan for Southeast Asia
 resource appServicePlanSoutheastAsia 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: 'TechSolutionsPlanSoutheastAsia'
   location: 'southeastasia'
