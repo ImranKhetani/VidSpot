@@ -32,6 +32,7 @@ jobs:
           app-name: TechSolutionsWebAppCentralIndia
           slot-name: production
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_CENTRAL_INDIA }}
+          package: ./src
 
       - name: Deploy Application Code to Web App (Southeast Asia)
         uses: azure/webapps-deploy@v2
@@ -39,3 +40,4 @@ jobs:
           app-name: TechSolutionsWebAppSoutheastAsia
           slot-name: production
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_SOUTHEAST_ASIA }}
+          package: ./src
