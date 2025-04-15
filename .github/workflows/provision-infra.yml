@@ -24,14 +24,17 @@ jobs:
       # Step 3: Deploy Infrastructure using Bicep template
       - name: Deploy Bicep template
         uses: azure/CLI@v1
-        id: deploy-infra  # Add an ID for capturing output
+        id: deploy-infra
         with:
           inlineScript: |
+            # Create the deployment
             az deployment group create \
               --resource-group TechSolutionsRG \
               --name deployVidSpot \
               --template-file ./bicep/main.bicep \
               --parameters randomSeed=${{ github.run_id }}
+
+            # Capture deployment outputs
             az deployment group show \
               --resource-group TechSolutionsRG \
               --name deployVidSpot \
@@ -40,28 +43,44 @@ jobs:
       # Step 4: Extract Web App Names
       - name: Parse Output Variables
         run: |
+          echo "Parsing outputs.json..."
+          cat outputs.json  # Debug: Display the outputs.json file
           WEBAPP_CI=$(jq -r '.webAppNameCentralIndia.value' outputs.json)
           WEBAPP_SEA=$(jq -r '.webAppNameSoutheastAsia.value')
+          echo "Extracted WEBAPP_CI: $WEBAPP_CI"
+          echo "Extracted WEBAPP_SEA: $WEBAPP_SEA"
+          
+          # Export environment variables for subsequent steps
           echo "WEBAPP_CI=$WEBAPP_CI" >> $GITHUB_ENV
           echo "WEBAPP_SEA=$WEBAPP_SEA" >> $GITHUB_ENV
 
-      # Step 5: Deploy Application Code to Central India Web App
+      # Step 5: Validate Web App Names
+      - name: Validate Web App Names
+        run: |
+          if [ -z "$WEBAPP_CI" ] || [ -z "$WEBAPP_SEA" ]; then
+            echo "Error: Web app names are not set."
+            exit 1
+          fi
+          echo "Validation passed. WEBAPP_CI and WEBAPP_SEA are set."
+
+      # Step 6: Deploy Application Code to Central India Web App
       - name: Deploy Application Code to Web App (Central India)
         uses: azure/cli@v2
         with:
           inlineScript: |
+            echo "Deploying to Web App (Central India): $WEBAPP_CI"
             az webapp deploy --name $WEBAPP_CI \
               --resource-group TechSolutionsRG \
               --src-path ./src/publish \
               --type zip
 
-      # Step 6: Deploy Application Code to Southeast Asia Web App
+      # Step 7: Deploy Application Code to Southeast Asia Web App
       - name: Deploy Application Code to Web App (Southeast Asia)
         uses: azure/cli@v2
         with:
           inlineScript: |
+            echo "Deploying to Web App (Southeast Asia): $WEBAPP_SEA"
             az webapp deploy --name $WEBAPP_SEA \
               --resource-group TechSolutionsRG \
               --src-path ./src/publish \
               --type zip
-
