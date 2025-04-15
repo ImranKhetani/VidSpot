@@ -48,3 +48,7 @@ resource webAppSoutheastAsia 'Microsoft.Web/sites@2022-03-01' = {
     serverFarmId: appServicePlanSoutheastAsia.id
   }
 }
+
+output webAppNameCentralIndia string = webAppCentralIndia.name
+output webAppNameSoutheastAsia string = webAppSoutheastAsia.name
+
