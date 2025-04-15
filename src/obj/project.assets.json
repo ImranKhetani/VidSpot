@@ -8,26 +8,25 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\ikhetani\\.nuget\\packages\\": {}
+    "/home/hotmail/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ikhetani\\Downloads\\MyWebApp\\MyWebApp\\MyWebApp.csproj",
-      "projectName": "MyWebApp",
-      "projectPath": "C:\\Users\\ikhetani\\Downloads\\MyWebApp\\MyWebApp\\MyWebApp.csproj",
-      "packagesPath": "C:\\Users\\ikhetani\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ikhetani\\Downloads\\MyWebApp\\MyWebApp\\obj\\",
+      "projectUniqueName": "/home/hotmail/VidSpot/src/VidSpot.csproj",
+      "projectName": "VidSpot",
+      "projectPath": "/home/hotmail/VidSpot/src/VidSpot.csproj",
+      "packagesPath": "/home/hotmail/.nuget/packages/",
+      "outputPath": "/home/hotmail/VidSpot/src/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ikhetani\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/hotmail/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "https://api.nuget.org/v3/index.json": {},
-        "https://nuget.intra.vision-box.com/api/v2": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
@@ -68,7 +67,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.408/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.407/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

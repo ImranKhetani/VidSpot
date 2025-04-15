@@ -1,0 +1,7 @@
+/home/hotmail/VidSpot/src/publish/VidSpot
+/home/hotmail/VidSpot/src/publish/appsettings.Development.json
+/home/hotmail/VidSpot/src/publish/appsettings.json
+/home/hotmail/VidSpot/src/publish/VidSpot.dll
+/home/hotmail/VidSpot/src/publish/VidSpot.deps.json
+/home/hotmail/VidSpot/src/publish/VidSpot.runtimeconfig.json
+/home/hotmail/VidSpot/src/publish/VidSpot.pdb
