@@ -2,20 +2,20 @@
 param randomSeed string  // Input seed to ensure uniqueness for randomness
 
 // Generate Random Suffix
-var randomStringCentralIndia = uniqueString(format('{0}-CI', randomSeed))
+var randomStringJapanEast = uniqueString(format('{0}-JE', randomSeed))
 var randomStringSoutheastAsia = uniqueString(format('{0}-SEA', randomSeed))
 
 // Replace underscores with hyphens in generated names
-var webAppNameCentralIndia = format('VidSpot-CI-{0}', randomStringCentralIndia)
+var webAppNameJapanEast = format('VidSpot-JE-{0}', randomStringJapanEast)
 var webAppNameSoutheastAsia = format('VidSpot-SEA-{0}', randomStringSoutheastAsia)
 
 // Define App Service Plan for Central India
-resource appServicePlanCentralIndia 'Microsoft.Web/serverfarms@2022-03-01' = {
-  name: 'TechSolutionsPlanCentralIndia'
-  location: 'centralindia'
+resource appServicePlanJapanEast 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: 'TechSolutionsPlanJapanEast'
+  location: 'JapanEast'
   sku: {
-    name: 'F1'
-    tier: 'Free'
+    name: 'S1'
+    tier: 'Standard'
     capacity: 1
   }
 }
@@ -25,18 +25,18 @@ resource appServicePlanSoutheastAsia 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: 'TechSolutionsPlanSoutheastAsia'
   location: 'southeastasia'
   sku: {
-    name: 'F1'
-    tier: 'Free'
+    name: 'S1'
+    tier: 'Standard'
     capacity: 1
   }
 }
 
-// Define Web App for Central India
-resource webAppCentralIndia 'Microsoft.Web/sites@2022-03-01' = {
-  name: webAppNameCentralIndia
-  location: 'centralindia'
+// Define Web App for JapanEast
+resource webAppJapanEast 'Microsoft.Web/sites@2022-03-01' = {
+  name: webAppNameJapanEast
+  location: 'JapanEast'
   properties: {
-    serverFarmId: appServicePlanCentralIndia.id
+    serverFarmId: appServicePlanJapanEast.id
   }
 }
 
@@ -49,6 +49,6 @@ resource webAppSoutheastAsia 'Microsoft.Web/sites@2022-03-01' = {
   }
 }
 
-output webAppNameCentralIndia string = webAppCentralIndia.name
+output webAppNameJapanEast string = webAppJapanEast.name
 output webAppNameSoutheastAsia string = webAppSoutheastAsia.name
 
