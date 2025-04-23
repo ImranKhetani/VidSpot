@@ -3,7 +3,7 @@ name: Provision, Build, and Deploy Application
 on:
   push:
     branches:
-      - main
+      - staging
   workflow_dispatch:
 
 jobs:
@@ -87,42 +87,42 @@ jobs:
           echo "Parsing web app names from outputs.json..."
 
           # Debugging specific outputs
-          echo "webAppNameCentralIndia: $(jq '.webAppNameCentralIndia' outputs.json)"
+          echo "webAppNameJapanEast: $(jq '.webAppNameJapanEast' outputs.json)"
           echo "webAppNameSoutheastAsia: $(jq '.webAppNameSoutheastAsia' outputs.json)"
 
           # Parse values
-          WEBAPP_CI=$(jq -r '.webAppNameCentralIndia.value' outputs.json)
+          WEBAPP_JE=$(jq -r '.webAppNameJapanEast.value' outputs.json)
           WEBAPP_SEA=$(jq -r '.webAppNameSoutheastAsia.value' outputs.json)
 
           # Debug parsed values
-          echo "WEBAPP_CI: $WEBAPP_CI"
+          echo "WEBAPP_JE: $WEBAPP_JE"
           echo "WEBAPP_SEA: $WEBAPP_SEA"
 
           # Export environment variables
-          echo "WEBAPP_CI=$WEBAPP_CI" >> $GITHUB_ENV
+          echo "WEBAPP_JE=$WEBAPP_JE" >> $GITHUB_ENV
           echo "WEBAPP_SEA=$WEBAPP_SEA" >> $GITHUB_ENV
 
       # Step 10: Validate Web App Names
       - name: Validate Web App Names
         run: |
           echo "Validating web app names..."
-          if [ -z "$WEBAPP_CI" ] || [ -z "$WEBAPP_SEA" ]; then
+          if [ -z "$WEBAPP_JE" ] || [ -z "$WEBAPP_SEA" ]; then
             echo "Error: Web app names are not set."
             exit 1
           fi
-          echo "Validation passed. WEBAPP_CI and WEBAPP_SEA are set."
+          echo "Validation passed. WEBAPP_JE and WEBAPP_SEA are set."
 
-      # Step 11: Deploy Application Code to Central India Web App
-      - name: Deploy Application Code to Web App (Central India)
+      # Step 11: Deploy Application Code to Japan East Web App
+      - name: Deploy Application Code to Web App (Japan East)
         uses: azure/cli@v2
         with:
           inlineScript: |
             echo "Current Directory: $(pwd)"
             echo "Deploying from path: $(pwd)/src/app.zip"
-            echo "Deploying to Web App (Central India): $WEBAPP_CI"
+            echo "Deploying to Web App (Japan East): $WEBAPP_JE"
             
             # Deploy application
-            az webapp deploy --name $WEBAPP_CI \
+            az webapp deploy --name $WEBAPP_JE \
               --resource-group TechSolutionsRG \
               --src-path /home/runner/work/VidSpot/VidSpot/src/app.zip \
               --type zip
