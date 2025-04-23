@@ -3,7 +3,7 @@ name: Provision, Build, and Deploy Application
 on:
   push:
     branches:
-      - staging
+      - main
   workflow_dispatch:
 
 jobs:
